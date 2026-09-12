@@ -18,7 +18,13 @@
     regexp:  '      <blockpriv>1</blockpriv>'
     replace: '      <blockpriv>0</blockpriv>'
 
-- name: restart configd
+- name: change hostname
+  ansible.builtin.replace:
+    path: /conf/config.xml
+    regexp:  '    <hostname>.*</hostname>'
+    replace: '    <hostname>{{ inventory_hostname }}</hostname>'
+
+- name: reload all services
   ansible.builtin.shell: |
-    service configd restart
+    /usr/local/sbin/opnsense-shell reload
 
