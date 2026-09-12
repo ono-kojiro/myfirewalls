@@ -1,0 +1,66 @@
+---
+
+- name: create api key
+  ansible.builtin.shell: |
+    key=`openssl rand -base64 48`
+    secret=`openssl rand -hex 32`
+    hash=`openssl passwd -6 "$secret"`
+
+    {
+      echo "key='$key'"
+      echo "secret='$secret'"
+      echo "hash='$hash'"
+
+    } | tee /tmp/apikey.shrc
+    
+  register: res
+
+- name: show apikey
+  ansible.builtin.debug:
+    var: res.stdout_lines
+
+- name: add apikeys
+  ansible.builtin.shell: |
+    config_xml="/conf/config.xml"
+    . /tmp/apikey.shrc; \
+    sed -i -e "s|<apikeys/>|<apikeys>$key\|$hash</apikeys>|" $config_xml
+
+- name: replace apikeys
+  ansible.builtin.shell: |
+    config_xml="/conf/config.xml"
+    . /tmp/apikey.shrc; \
+    sed -i -e "s|<apikeys>.*</apikeys>|<apikeys>$key\|$hash</apikeys>|" $config_xml
+
+- name: fetch apikey
+  ansible.builtin.fetch:
+    src: /tmp/apikey.shrc
+    #dest: "./apikeys/{{ inventory_hostname }}.shrc"
+    dest: "./apikey.shrc"
+    flat: yes
+
+- name: show info
+  ansible.builtin.debug:
+    msg: "apikeys was saved in ./apikey.shrc"
+
+- name: reload all services
+  ansible.builtin.shell: |
+    /usr/local/etc/rc.reload_all
+
+- name: read apikeys
+  ansible.builtin.shell :
+    cat /conf/config.xml | grep apikeys
+  register: res
+
+- name: show apikey
+  ansible.builtin.debug:
+    var: res.stdout_lines
+
+- name: remove apikey in remote
+  ansible.builtin.file:
+    path: /tmp/apikey.shrc
+    state: absent
+
+#- name: dump ansible_facts
+#  ansible.builtin.debug:
+#    var: ansible_facts
+

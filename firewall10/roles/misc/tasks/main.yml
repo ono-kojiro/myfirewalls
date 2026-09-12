@@ -1,0 +1,24 @@
+---
+- name: check if nohttpreferercheck exists
+  ansible.builtin.shell: |
+    cat /conf/config.yml | grep '<nohttpreferercheck>' | wc -l
+  register: res
+
+- name: add nohttpreferercheck
+  ansible.builtin.lineinfile:
+    path: /conf/config.xml
+    line: '      <nohttpreferercheck>1</nohttpreferercheck>'
+    state: present
+    insertbefore: '</webgui>'
+  when: res.stdout.strip() == "0"
+
+- name: disable blockpriv for WAN
+  ansible.builtin.replace:
+    path: /conf/config.xml
+    regexp:  '      <blockpriv>1</blockpriv>'
+    replace: '      <blockpriv>0</blockpriv>'
+
+- name: restart configd
+  ansible.builtin.shell: |
+    service configd restart
+
