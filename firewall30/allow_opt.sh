@@ -1,0 +1,1 @@
+../common/allow_opt.sh

@@ -1,0 +1,13 @@
+- name: setup firewall
+  hosts: firewall30
+
+  vars_files:
+  - vars/apikey.yml
+
+  roles:
+  - name: apikey
+    tags: apikey, never
+
+  - name: misc
+    tags: misc
+
