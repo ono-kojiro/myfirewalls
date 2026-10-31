@@ -1,0 +1,10 @@
+- name: setup firewall
+  hosts: firewall40
+
+  roles:
+  - name: apikey
+    tags: apikey, never
+
+  - name: misc
+    tags: misc
+

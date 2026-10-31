@@ -1,0 +1,6 @@
+*~
+.env
+apikey.shrc
+*.json
+hosts.yml
+
