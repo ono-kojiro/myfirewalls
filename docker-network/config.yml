@@ -1,0 +1,26 @@
+---
+bridges:
+#  - name: admin
+#    ipv4.method: manual
+#    ipv4.addresses: 172.31.0.1/24
+#    ipv6.method: disable
+
+networks:
+  - name: br41
+    parent: br41
+    driver: macvlan
+    subnet: 172.16.41.0/24
+    gateway: 172.16.41.1
+
+  - name: br42
+    parent: br42
+    driver: macvlan
+    subnet: 172.16.42.0/24
+    gateway: 172.16.42.1
+  
+  - name: br43
+    parent: br43
+    driver: macvlan
+    subnet: 172.16.43.0/24
+    gateway: 172.16.43.1
+
