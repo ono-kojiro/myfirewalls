@@ -3,4 +3,5 @@
 apikey.shrc
 *.json
 hosts.yml
+.snmpuser
 
