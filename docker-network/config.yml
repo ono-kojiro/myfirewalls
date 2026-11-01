@@ -1,5 +1,40 @@
 ---
 networks:
+  # for firewall20
+  - name: br21
+    parent: br21
+    driver: macvlan
+    subnet: 172.16.21.0/24
+    gateway: 172.16.21.1
+  - name: br22
+    parent: br22
+    driver: macvlan
+    subnet: 172.16.22.0/24
+    gateway: 172.16.22.1
+  - name: br23
+    parent: br23
+    driver: macvlan
+    subnet: 172.16.23.0/24
+    gateway: 172.16.23.1
+  
+  # for firewall30
+  - name: br31
+    parent: br31
+    driver: macvlan
+    subnet: 172.16.31.0/24
+    gateway: 172.16.31.1
+  - name: br32
+    parent: br32
+    driver: macvlan
+    subnet: 172.16.32.0/24
+    gateway: 172.16.32.1
+  - name: br33
+    parent: br33
+    driver: macvlan
+    subnet: 172.16.33.0/24
+    gateway: 172.16.33.1
+
+  # for firewall40
   - name: br41
     parent: br41
     driver: macvlan
