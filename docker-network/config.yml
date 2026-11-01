@@ -1,10 +1,4 @@
 ---
-bridges:
-#  - name: admin
-#    ipv4.method: manual
-#    ipv4.addresses: 172.31.0.1/24
-#    ipv6.method: disable
-
 networks:
   - name: br41
     parent: br41
