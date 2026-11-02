@@ -1,0 +1,30 @@
+---
+terminals:
+  - id: 11
+    name: br11
+  - id: 12
+    name: br12
+  - id: 13
+    name: br13
+
+  - id: 21
+    name: br21
+  - id: 22
+    name: br22
+  - id: 23
+    name: br23
+  
+  - id: 31
+    name: br31
+  - id: 32
+    name: br32
+  - id: 33
+    name: br33
+
+  - id: 41
+    name: br41
+  - id: 42
+    name: br42
+  - id: 43
+    name: br43
+

@@ -1,0 +1,33 @@
+---
+services:
+{% for netid in terminals %}
+  terminal{{ netid }}:
+    image: ${IMAGE}
+    container_name: terminal{{ netid }}
+    hostname: terminal{{ netid }}
+    restart: always
+    stdin_open: true
+    tty: true
+
+    cap_add:
+    - NET_ADMIN
+
+    environment:
+      TZ: Asia/Tokyo
+      LDAP_URI: ${LDAP_URI}
+      LDAP_BASE: ${LDAP_BASE}
+      LDAP_START_TLS: ${LDAP_START_TLS}
+      LDAP_TLS_REQCERT: ${LDAP_TLS_REQCERT}
+      LDAP_ALLOW_GROUPS: ${LDAP_ALLOW_GROUPS}
+
+    networks:
+      - br{{ netid }}
+
+{% endfor %}
+
+networks:
+{% for netid in terminals %}
+  br{{ netid }}:
+    external: true
+{% endfor %}
+
