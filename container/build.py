@@ -18,6 +18,8 @@ from jinja2 import Environment, FileSystemLoader
 
 from pprint import pprint
 
+configs = None
+
 def read_json(filepath) :
     fp = open(filepath, mode='r', encoding='utf-8')
     data = json.loads(fp.read())
@@ -59,55 +61,56 @@ def read_yaml_dict(filepath):
     fp.close()
     return data
 
+def load_config(config_yml):
+    global configs
+    configs = read_yaml_dict(config_yml)
+
 def usage():
     print("Usage : {0}".format(sys.argv[0]))
 
-def all(configs):
+def all():
     print('DEBUG: all')
 
-def run_command_and_read_response(cmd):
-    try :
-        proc = subprocess.Popen(
-                cmd,
-                shell=True,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.STDOUT,
-            )
+def run_command_lines(cmd):
+    proc = subprocess.Popen(
+        cmd, shell=True, text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+    )
 
-        while True:
-            line = proc.stdout.readline()
-            if line:
-                yield line.decode('utf-8', errors='replace')
+    for line in proc.stdout :
+        yield line
 
-            if not line and proc.poll() is not None:
-                break
+    rc = proc.wait()
 
-    except Exception as e:
-        print("ERROR: subprocess.Popen failed", file=sys.stderr)
-        print("ERROR: {0}".format(e), file=sys.stderr)
-        sys.exit(1)
+    if rc != 0:
+        raise RuntimeError(
+            f"command failed: {cmd}"
+        )
 
 def run_command(cmd):
-    for line in run_command_and_read_response(cmd):
+    print(f"{cmd}")
+
+    for line in run_command_lines(cmd):
         print(line, end='')
     
-def create(configs):
+def create():
     cmd = 'docker compose up --no-start'
     run_command(cmd)
 
-def start(configs):
+def start():
     cmd = 'docker compose start'
     run_command(cmd)
 
-def stop(configs):
+def stop():
     cmd = 'docker compose stop'
     run_command(cmd)
 
-def down(configs):
+def down():
     cmd = 'docker compose down'
     run_command(cmd)
 
-def compose(configs):
+def compose():
 
     env = Environment(
         loader=FileSystemLoader("."),
@@ -131,6 +134,28 @@ def compose(configs):
     fp.write('\n')
     fp.close()
 
+def vip_add():
+    octs = [ '13', '41', '42', '43' ]
+    for val in octs :
+        term = 'terminal{0}'.format(val)
+        addr = '192.168.{0}.2/24'.format(val)
+        cmd = 'docker exec -i {0} ip addr add {1} dev eth0'.format(term, addr)
+        run_command(cmd)
+
+def vip_delete():
+    octs = [ '13', '41', '42', '43' ]
+    for val in octs :
+        term = 'terminal{0}'.format(val)
+        addr = '192.168.{0}.2/24'.format(val)
+        cmd = 'docker exec -i {0} ip addr del {1} dev eth0'.format(term, addr)
+        run_command(cmd)
+
+def vip_list():
+    octs = [ '13', '41', '42', '43' ]
+    for val in octs :
+        term = 'terminal{0}'.format(val)
+        cmd = 'docker exec -i {0} ip addr show eth0'.format(term)
+        run_command(cmd)
 
 def main():
     ret = 0
@@ -175,18 +200,14 @@ def main():
     if ret != 0:
         sys.exit(1)
  
-    configs = {}
-
     if config_yml is not None :
-        configs = read_yaml_dict(config_yml)
-
-    #pprint(configs)
+        load_config(config_yml)
 
     for target in args:
         target = re.sub(r'-', '_', target)
         if target in globals():
             func = globals()[target]
-            res = func(configs)
+            res = func()
         else :
             print('ERROR: no such function, {0}'.format(target),
                 file=sys.stderr)
