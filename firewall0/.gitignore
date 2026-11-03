@@ -1,0 +1,7 @@
+*~
+apikey.shrc
+config.shrc
+hosts.yml
+.env
+__pycache__/
+
