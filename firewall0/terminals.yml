@@ -1,5 +1,8 @@
 ---
 terminals:
+  - name: wanterm
+    bridge: wan
+
   - name: opt1term
     bridge: opt1
 
@@ -8,4 +11,11 @@ terminals:
 
   - name: opt3term
     bridge: opt3
+  
+  - name: opt4term
+    bridge: opt4
+
+  - name: inetterm
+    bridge: inet
+
 

@@ -1,0 +1,59 @@
+---
+networks:
+  - name: wan
+    driver:  macvlan
+    subnet:  172.16.0.0/24
+    gateway: 172.16.0.1
+    parent:  wan
+
+  - name: opt1
+    driver:  macvlan
+    subnet:  172.16.1.0/24
+    gateway: 172.16.1.1
+    parent:  opt1
+
+  - name: opt2
+    driver:  macvlan
+    subnet:  172.16.2.0/24
+    gateway: 172.16.2.1
+    parent:  opt2
+
+  - name: opt3
+    driver:  macvlan
+    subnet:  172.16.3.0/24
+    gateway: 172.16.3.1
+    parent:  opt3
+  
+  - name: opt4
+    driver:  macvlan
+    subnet:  172.16.4.0/24
+    gateway: 172.16.4.1
+    parent:  opt4
+  
+  - name: inet
+    driver:  macvlan
+    subnet:  172.16.99.0/24
+    gateway: 172.16.99.1
+    parent:  inet
+
+---
+terminals:
+  - name: wanterm
+    bridge: wan
+
+  - name: opt1term
+    bridge: opt1
+
+  - name: opt2term
+    bridge: opt2
+
+  - name: opt3term
+    bridge: opt3
+  
+  - name: opt4term
+    bridge: opt4
+
+  - name: inetterm
+    bridge: inet
+
+

@@ -59,8 +59,8 @@ def apikey():
     cmd = f'ansible-playbook {flags} -i hosts.yml -t {tag} site.yml'
     run_command(cmd)
 
-def network():
-    networks = read_yaml_dict('networks.yml')['networks']
+def addnw():
+    networks = configs.get('networks', [])
 
     for item in networks :
         cmd = 'docker network create'
@@ -73,6 +73,14 @@ def network():
         logger.info(cmd)
         run_command(cmd)
 
+def rmnw():
+    networks = read_yaml_dict('networks.yml')['networks']
+
+    for item in networks :
+        cmd = 'docker network rm {0}'.format(item['name'])
+        logger.info(cmd)
+        run_command(cmd)
+
 def compose():
 
     env = Environment(
@@ -82,7 +90,7 @@ def compose():
     )
 
     template = env.get_template('docker-compose.yml.j2')
-    terminals = read_yaml_dict('terminals.yml')['terminals']
+    terminals = configs.get('terminals', [])
 
     data = {
         "terminals" : terminals,
@@ -109,6 +117,9 @@ def stop():
 def down():
     cmd = 'docker compose down'
     run_command(cmd)
+
+def debug():
+    print(json.dumps(configs))
 
 def main():
     ret = 0
