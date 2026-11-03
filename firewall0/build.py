@@ -59,6 +59,57 @@ def apikey():
     cmd = f'ansible-playbook {flags} -i hosts.yml -t {tag} site.yml'
     run_command(cmd)
 
+def network():
+    networks = read_yaml_dict('networks.yml')['networks']
+
+    for item in networks :
+        cmd = 'docker network create'
+        cmd += ' --driver={0}'.format(item['driver'])
+        cmd += ' --subnet={0}'.format(item['subnet'])
+        cmd += ' --gateway={0}'.format(item['gateway'])
+        cmd += ' -o "parent={0}"'.format(item['parent'])
+        cmd += ' {0}'.format(item['name'])
+
+        logger.info(cmd)
+        run_command(cmd)
+
+def compose():
+
+    env = Environment(
+        loader=FileSystemLoader("."),
+        trim_blocks=True,
+        lstrip_blocks=True,
+    )
+
+    template = env.get_template('docker-compose.yml.j2')
+    terminals = read_yaml_dict('terminals.yml')['terminals']
+
+    data = {
+        "terminals" : terminals,
+    }
+
+    output = 'docker-compose.yml'
+    fp = open(output, mode='w', encoding='utf-8')
+    fp.write(template.render(**data))
+    fp.write('\n')
+    fp.close()
+
+def create():
+    cmd = 'docker compose up --no-start'
+    run_command(cmd)
+
+def start():
+    cmd = 'docker compose start'
+    run_command(cmd)
+
+def stop():
+    cmd = 'docker compose stop'
+    run_command(cmd)
+
+def down():
+    cmd = 'docker compose down'
+    run_command(cmd)
+
 def main():
     ret = 0
 

@@ -1,0 +1,11 @@
+---
+terminals:
+  - name: opt1term
+    bridge: opt1
+
+  - name: opt2term
+    bridge: opt2
+
+  - name: opt3term
+    bridge: opt3
+

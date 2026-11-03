@@ -6,6 +6,8 @@ logger = logging.getLogger(__name__)
 import json
 import yaml
 
+import copy
+
 import subprocess
 
 __all__ = [

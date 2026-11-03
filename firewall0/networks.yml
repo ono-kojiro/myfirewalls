@@ -1,0 +1,20 @@
+---
+networks:
+  - name: opt1
+    driver: macvlan
+    subnet: 192.168.1.0/24
+    gateway: 192.168.1.1
+    parent: opt1
+
+  - name: opt2
+    driver: macvlan
+    subnet: 192.168.2.0/24
+    gateway: 192.168.2.1
+    parent: opt2
+
+  - name: opt3
+    driver: macvlan
+    subnet: 192.168.3.0/24
+    gateway: 192.168.3.1
+    parent: opt3
+
