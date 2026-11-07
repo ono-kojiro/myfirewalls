@@ -42,11 +42,20 @@ default()
   ansible-playbook $flags -i hosts.yml -t $tag site.yml
 }
 
-snmp_enable()
+test_api()
+{
+  . ./apikey.shrc
+  . ./config.shrc
+
+  curl -s -k -u "$key:$secret" \
+      https://$target/api/core/system/status | jq .
+}
+
+enable_snmp()
 {
   netsnmp
-  netsnmp_user
   netsnmp_enable
+  netsnmp_user
 }
 
 netsnmp()
@@ -58,7 +67,19 @@ netsnmp()
 
 netsnmp_user()
 {
-  opncli netsnmp user add_user username=myuser password=myauthpass enckey=myprivpass enabled=1
+  . ./config.shrc
+  
+  conffile=`pwd`/snmp/hosts/${target}.conf
+  username=`cat $conffile | grep '^defSecurityName' | awk '{ print $2 }'`
+  password=`cat $conffile | grep '^defAuthPassphrase' | awk '{ print $2 }'`
+  enckey=`cat $conffile | grep '^defPrivPassphrase' | awk '{ print $2 }'`
+
+  opncli netsnmp user add_user \
+      username="$username" \
+      password="$password" \
+      enckey="$enckey" \
+      enabled=1
+
   opncli netsnmp service reconfigure
 }
 
@@ -85,23 +106,9 @@ snmp_stop()
 
 test_snmp()
 {
-  echo hoge
-  snmpwalk \
-    -OX \
-    -Pe \
-    --hexOutputLength=0 \
-    -m ALL \
-    -M /usr/share/snmp/mibs \
-    -v 3 \
-    -l authPriv \
-    -a SHA \
-    -A myauthpass \
-    -u myuser \
-    -x AES \
-    -X myprivpass \
-    192.168.122.10 SNMPv2-MIB::sysDescr
-
-  echo "snmpwalk finished"
+  . ./config.shrc
+  SNMPCONFPATH=`pwd`/snmp \
+    snmpwalk $target SNMPv2-MIB::sysDescr
 }
 
 hosts
@@ -134,7 +141,6 @@ fi
 
 for target in $args; do
   target=`echo $target | tr '-' '_'`
-  echo target is $target
   num=`LANG=C type $target | grep 'function' | wc -l`
   if [ $num -ne 0 ]; then
     $target

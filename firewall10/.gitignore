@@ -3,4 +3,6 @@
 *.log
 apikey.shrc
 hosts.yml
+config.shrc
+snmp/
 
