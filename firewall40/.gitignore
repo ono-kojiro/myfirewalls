@@ -4,4 +4,7 @@ apikey.shrc
 *.json
 hosts.yml
 .snmpuser
+snmp/
+*.log
+config.shrc
 
