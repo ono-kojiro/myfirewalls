@@ -1,5 +1,22 @@
 ---
 networks:
+  # for firewall10
+  - name: br11
+    parent: br11
+    driver: macvlan
+    subnet: 172.16.11.0/24
+    gateway: 172.16.11.1
+  - name: br12
+    parent: br12
+    driver: macvlan
+    subnet: 172.16.12.0/24
+    gateway: 172.16.12.1
+  - name: br13
+    parent: br13
+    driver: macvlan
+    subnet: 172.16.13.0/24
+    gateway: 172.16.13.1
+
   # for firewall20
   - name: br21
     parent: br21

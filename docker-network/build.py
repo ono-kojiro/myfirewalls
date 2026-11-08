@@ -91,50 +91,7 @@ def data(configs):
     for line in get_cmd_results(cmd):
         print(line, end='')
 
-def create_bridge(configs):
-
-    if not 'bridges' in configs:
-        print('DEBUG: bridges is not defined')
-        return
-
-    if configs['bridges'] is None :
-        return
-
-    for item in configs['bridges']:
-        name = item['name']
-        conn_id = name
-        ifname  = name
-        ipv4_method = item['ipv4.method']
-        ipv4_addresses = item['ipv4.addresses']
-        ipv6_method = item['ipv6.method']
-
-        cmd =  'sudo nmcli con add type bridge'
-        cmd += ' conn.id {0}'.format(conn_id)
-        cmd += ' ifname {0}'.format(ifname)
-        cmd += ' ipv4.method {0}'.format(ipv4_method)
-        cmd += ' ipv4.addresses {0}'.format(ipv4_addresses)
-        cmd += ' ipv6.method {0}'.format(ipv6_method)
-   
-    print('INFO: create bridge, {0}'.format(name))
-    print('DEBUG: cmd is "{0}"'.format(cmd))
-
-    for line in get_cmd_results(cmd):
-        print(line, end='')
-
-def remove_bridge(configs):
-    if configs['bridges'] is None :
-        return
-
-    for item in configs['bridges']:
-        name = item['name']
-
-        cmd =  'sudo nmcli con del {0}'.format(name)
-        print('INFO: remove bridge, {0}'.format(name))
-
-        for line in get_cmd_results(cmd):
-            print(line, end='')
-
-def create_network(configs):
+def create(configs):
     for item in configs['networks']:
         parent  = item['parent']
         driver  = item['driver']
@@ -156,7 +113,7 @@ def create_network(configs):
         for line in get_cmd_results(cmd):
             print(line, end='')
 
-def remove_network(configs):
+def remove(configs):
     for item in configs['networks']:
         name    = item['name']
         cmd =  'docker network remove {0}'.format(name)
