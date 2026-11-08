@@ -1,13 +1,17 @@
 ---
 services:
-{% for netid in terminals %}
-  terminal{{ netid }}:
+{% for id in terminals %}
+  terminal{{ id }}:
     image: ${IMAGE}
-    container_name: terminal{{ netid }}
-    hostname: terminal{{ netid }}
+    container_name: terminal{{ id }}
+    hostname: terminal{{ id }}
     restart: always
     stdin_open: true
     tty: true
+    
+    networks:
+      br{{ id }}:
+        ipv4_address: 172.16.{{ id }}.1{{ id }}
 
     cap_add:
     - NET_ADMIN
@@ -20,14 +24,11 @@ services:
       LDAP_TLS_REQCERT: ${LDAP_TLS_REQCERT}
       LDAP_ALLOW_GROUPS: ${LDAP_ALLOW_GROUPS}
 
-    networks:
-      - br{{ netid }}
-
 {% endfor %}
 
 networks:
-{% for netid in terminals %}
-  br{{ netid }}:
+{% for id in terminals %}
+  br{{ id }}:
     external: true
 {% endfor %}
 
