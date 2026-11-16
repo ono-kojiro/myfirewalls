@@ -1,0 +1,14 @@
+- name: setup linux bridge
+  hosts: myserver
+  
+  #environment:
+  #  http_proxy: http://proxy.example.com:8080
+  #  https_proxy: http://proxy.example.com:8080
+
+  roles:
+  - name: linux
+    tags: linux
+
+  - name: docker
+    tags: docker
+

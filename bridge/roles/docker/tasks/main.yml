@@ -1,0 +1,19 @@
+---
+- name: delete docker bridges
+  ansible.builtin.shell: |
+    docker network rm {{ item.name }}_{{ item.driver }}
+  loop: "{{ bridges }}"
+  ignore_errors: true
+  tags: delete
+
+- name: create docker bridges
+  ansible.builtin.shell: |
+    docker network create \
+      --driver={{ item.driver }} \
+      --subnet={{ item.subnet }} \
+      --gateway={{ item.gateway }} \
+      -o "parent={{ item.name }}" \
+      {{ item.name }}
+  loop: "{{ bridges }}"
+  tags: add
+
