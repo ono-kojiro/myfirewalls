@@ -1,0 +1,33 @@
+---
+bridges:
+- name: wan
+  type: bridge
+  driver: macvlan
+  subnet: 172.16.0.0/24
+  gateway: 172.16.0.1
+
+- name: opt1
+  type: bridge
+  driver: macvlan
+  subnet: 172.16.1.0/24
+  gateway: 172.16.1.1
+
+- name: opt2
+  type: bridge
+  driver: macvlan
+  subnet: 172.16.2.0/24
+  gateway: 172.16.2.1
+
+- name: opt3
+  type: bridge
+  driver: macvlan
+  subnet: 172.16.3.0/24
+  gateway: 172.16.3.1
+
+- name: opt4
+  type: bridge
+  driver: macvlan
+  subnet: 172.16.4.0/24
+  gateway: 172.16.4.1
+
+

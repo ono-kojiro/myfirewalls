@@ -34,12 +34,12 @@
 - name: fetch apikey
   ansible.builtin.fetch:
     src: /tmp/apikey.shrc
-    dest: "./.env"
+    dest: "./apikey.shrc"
     flat: yes
 
 - name: show info
   ansible.builtin.debug:
-    msg: "apikeys was saved in ./.env"
+    msg: "apikeys was saved in ./apikey.shrc"
 
 - name: read apikeys
   ansible.builtin.shell :
