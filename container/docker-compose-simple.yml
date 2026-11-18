@@ -1,0 +1,130 @@
+---
+services:
+  server:
+    image: ${IMAGE}
+    container_name: server
+    hostname: server
+    restart: always
+    stdin_open: true
+    tty: true
+    
+    networks:
+      wan:
+        ipv4_address: 172.16.0.42
+
+    cap_add:
+    - NET_ADMIN
+
+    environment:
+      TZ: Asia/Tokyo
+      LDAP_URI: ${LDAP_URI}
+      LDAP_BASE: ${LDAP_BASE}
+      LDAP_START_TLS: ${LDAP_START_TLS}
+      LDAP_TLS_REQCERT: ${LDAP_TLS_REQCERT}
+      LDAP_ALLOW_GROUPS: ${LDAP_ALLOW_GROUPS}
+
+  client1:
+    image: ${IMAGE}
+    container_name: client1
+    hostname: client1
+    restart: always
+    stdin_open: true
+    tty: true
+    
+    networks:
+      opt1:
+        ipv4_address: 172.16.1.101
+
+    cap_add:
+    - NET_ADMIN
+
+    environment:
+      TZ: Asia/Tokyo
+      LDAP_URI: ${LDAP_URI}
+      LDAP_BASE: ${LDAP_BASE}
+      LDAP_START_TLS: ${LDAP_START_TLS}
+      LDAP_TLS_REQCERT: ${LDAP_TLS_REQCERT}
+      LDAP_ALLOW_GROUPS: ${LDAP_ALLOW_GROUPS}
+
+  client2:
+    image: ${IMAGE}
+    container_name: client2
+    hostname: client2
+    restart: always
+    stdin_open: true
+    tty: true
+    
+    networks:
+      opt2:
+        ipv4_address: 172.16.2.102
+
+    cap_add:
+    - NET_ADMIN
+
+    environment:
+      TZ: Asia/Tokyo
+      LDAP_URI: ${LDAP_URI}
+      LDAP_BASE: ${LDAP_BASE}
+      LDAP_START_TLS: ${LDAP_START_TLS}
+      LDAP_TLS_REQCERT: ${LDAP_TLS_REQCERT}
+      LDAP_ALLOW_GROUPS: ${LDAP_ALLOW_GROUPS}
+
+  client3:
+    image: ${IMAGE}
+    container_name: client3
+    hostname: client3
+    restart: always
+    stdin_open: true
+    tty: true
+    
+    networks:
+      opt3:
+        ipv4_address: 172.16.3.103
+
+    cap_add:
+    - NET_ADMIN
+
+    environment:
+      TZ: Asia/Tokyo
+      LDAP_URI: ${LDAP_URI}
+      LDAP_BASE: ${LDAP_BASE}
+      LDAP_START_TLS: ${LDAP_START_TLS}
+      LDAP_TLS_REQCERT: ${LDAP_TLS_REQCERT}
+      LDAP_ALLOW_GROUPS: ${LDAP_ALLOW_GROUPS}
+  
+  client4:
+    image: ${IMAGE}
+    container_name: client4
+    hostname: client4
+    restart: always
+    stdin_open: true
+    tty: true
+    
+    networks:
+      opt4:
+        ipv4_address: 172.16.4.104
+
+    cap_add:
+    - NET_ADMIN
+
+    environment:
+      TZ: Asia/Tokyo
+      LDAP_URI: ${LDAP_URI}
+      LDAP_BASE: ${LDAP_BASE}
+      LDAP_START_TLS: ${LDAP_START_TLS}
+      LDAP_TLS_REQCERT: ${LDAP_TLS_REQCERT}
+      LDAP_ALLOW_GROUPS: ${LDAP_ALLOW_GROUPS}
+
+
+networks:
+  wan:
+    external: true
+  opt1:
+    external: true
+  opt2:
+    external: true
+  opt3:
+    external: true
+  opt4:
+    external: true
+
